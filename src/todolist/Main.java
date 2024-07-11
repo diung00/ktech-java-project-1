@@ -1,20 +1,20 @@
 package todolist;
 
 
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
-        List<Todo> todoList = new ArrayList<>();
+
         Feature obj = new Feature();
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner= new Scanner(System.in);
 
         System.out.println("Welcome!!");
 
@@ -26,6 +26,7 @@ public class Main {
             switch (choice) {
                 case 1:
                     obj.taskAdd();
+
                     break;
                 case 2:
                     obj.editTask();
@@ -45,4 +46,5 @@ public class Main {
 
 
     }
+
 }

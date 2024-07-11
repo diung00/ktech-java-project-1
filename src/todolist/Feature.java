@@ -1,11 +1,13 @@
 package todolist;
 
+import java.io.*;
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
-public class Feature {
+public class Feature  {
     List<Todo> todoList = new ArrayList<>();
     Scanner scanner = new Scanner(System.in);
 
@@ -18,8 +20,8 @@ public class Feature {
    public void taskList(){
        if(todoList.isEmpty()){
            System.out.println("You have no more todo left!");
-       }
-       else{
+
+       } else{
            System.out.println("You have " + todoList.size()+ "todo left!");
            for (Todo task : todoList){
                System.out.println(task);
@@ -48,14 +50,16 @@ public class Feature {
 
             Todo newTask = new Todo(todo, deadline);
             todoList.add(newTask);
+
             System.out.println("Save!");
 
 
             System.out.println("Add more? [y/n]");
             String addmore = scanner.nextLine();
             if (addmore.equals("n")) break;
-            
+
         }
+        writedata(todoList);
     }
 
     public void editTask(){
@@ -63,7 +67,7 @@ public class Feature {
         int in = Integer.parseInt(scanner.nextLine());
         for (Todo task : todoList){
             if (in-1 == todoList.indexOf(task)){
-                taskAdd();
+
             }
         }
 
@@ -78,6 +82,7 @@ public class Feature {
                System.out.println(task + "Done");
            }
        }
+
     }
 
 
@@ -90,4 +95,41 @@ public class Feature {
             }
         }
     }
+
+    public static void writedata(List<Todo> todoList){
+        try(FileWriter fileWriter = new FileWriter("task.csv");
+            BufferedWriter writer = new BufferedWriter(fileWriter)){
+            StringBuilder lineBuilder = new StringBuilder();
+            for(Todo task : todoList){
+                lineBuilder.append(task.getTask()).append(",");
+                lineBuilder.append(task.getDeadline());
+                writer.write(lineBuilder.toString());
+                writer.newLine();
+                lineBuilder.setLength(0);
+            }
+        }catch (IOException e){
+            System.out.println("errror" + e.getMessage());
+        }
+    }
+
+    public static List<Todo> readData(){
+       List<Todo> list = new ArrayList<>();
+       try(FileReader fileReader = new FileReader("task.csv");
+        BufferedReader reader = new BufferedReader(fileReader)) {
+    String line;
+    while ((line = reader.readLine()) != null){
+        String [] elements = line.split(",");
+        list.add(new Todo(
+                elements[0],
+                elements[1]
+        ));
+    }
+        }catch (IOException e){
+            System.out.println("error"+ e.getMessage());
+        }
+        return list;
+
+    }
+
+
 }
